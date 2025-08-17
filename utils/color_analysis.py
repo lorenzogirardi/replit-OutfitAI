@@ -43,12 +43,12 @@ class ColorAnalyzer:
         else:
             image_array = image
             
+        # Remove any alpha channel before reshaping
+        if image_array.ndim == 3 and image_array.shape[2] == 4:
+            image_array = image_array[:, :, :3]
+
         # Reshape image to be a list of pixels
         pixels = image_array.reshape((-1, 3))
-        
-        # Remove any alpha channel
-        if pixels.shape[1] > 3:
-            pixels = pixels[:, :3]
         
         # Apply K-means clustering
         kmeans = KMeans(n_clusters=n_colors, random_state=42, n_init='auto')
