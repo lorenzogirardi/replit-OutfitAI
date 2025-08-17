@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  fashion-stylist:
+    build: .
+    container_name: ai-fashion-stylist
+    ports:
+      - "5000:5000"
+    volumes:
+      # Mount local images directory to container
+      - ./images:/app/images
+      # Optional: Mount for persistent data
+      - ./data:/app/data
+    environment:
+      - STREAMLIT_SERVER_PORT=5000
+      - STREAMLIT_SERVER_ADDRESS=0.0.0.0
+      - STREAMLIT_SERVER_HEADLESS=true
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/_stcore/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
